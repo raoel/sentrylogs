@@ -81,6 +81,7 @@ pip-log.txt
 *.pot
 *.pyc
 local_settings.py
+sentrylogs.yaml
 
 # NPM
 node_modules

@@ -1,0 +1,4 @@
+sentry_dsn: "<MY_SENTRY_DSN>"
+parsers:
+  - type: zabbixserver
+    logfile: /var/log/zabbix/server.log

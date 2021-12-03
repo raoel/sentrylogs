@@ -17,14 +17,12 @@ import re
 import sys
 
 from . import Parser
-from ..conf.settings import NGINX_ERROR_PATH
-
 
 class Nginx(Parser):
     """Nginx error logs"""
 
-    def __init__(self):
-        super(Nginx, self).__init__(NGINX_ERROR_PATH)
+    def __init__(self, filepath):
+        super(Nginx, self).__init__(filepath)
         self.pattern = r"^(?P<date>\S+) (?P<time>\S+) \[(?P<level>[^\]]+)\] (?P<pid>\d+)\#(?P<tid>\d+)\:(?: \*(?P<cid>\d+))? ?(?P<message>.+)"  # noqa: E501; pylint: disable=line-too-long
         self.nginx_to_sentry = {
             "debug": "debug",
