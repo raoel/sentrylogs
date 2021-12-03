@@ -50,7 +50,7 @@ class Parser(object):  # pylint: disable=useless-object-inheritance
         for line in follower:
             self.clear_attributes()
 
-            if line is not None and not line.strip():
+            if not line is None and bool(line.strip()):
                 self.parse(line)
                 send_message(
                     self.message,
