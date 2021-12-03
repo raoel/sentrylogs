@@ -47,6 +47,8 @@ build/config/buildinfo.properties
 # Python
 *.py[co]
 env
+.envrc
+.direnv
 
 # Packages
 *.egg[s]
