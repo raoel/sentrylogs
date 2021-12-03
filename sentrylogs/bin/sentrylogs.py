@@ -5,6 +5,7 @@ from locale import Error
 
 import argparse
 import yaml
+import sentry_sdk
 
 
 try:
@@ -23,8 +24,6 @@ def get_command_line_args():
     parser.add_argument('--configfile', '-c', default="sentrylogs.yaml",
                         help='A configuration file (.yaml) of some '
                              'Sentry integration')
-    # parser.add_argument('--sentrydsn', '-s', default="",
-    #                     help='The Sentry DSN string (overrides -c)')
     parser.add_argument('--daemonize', '-d', default=False,
                         action='store_const', const=True,
                         help='Run this script in background')
@@ -54,8 +53,6 @@ def parse_sentry_configuration(filename):
     with open(filename, "r") as stream:
         # no try..except because I want to send the error to the user is yaml is wrong
         yaml_config = yaml.safe_load(stream)
-        # except yaml.YAMLError as exc:
-            # raise(exc)
         if not yaml_config['sentry_dsn']:
             raise Error("mising sentry_dsn in configuration file")
         return yaml_config
@@ -65,7 +62,6 @@ def parse_sentry_configuration(filename):
 def launch_log_parsers(config):
     """Run all log file parsers that send entries to Sentry"""
     for parser in config['parsers']:
-
         if not parser['type']:
             raise Error("parser needs a type: %s " % str(parser))
         if parser['type'] == "nginx":
@@ -75,11 +71,13 @@ def launch_log_parsers(config):
             from ..parsers.zabbixserver import Zabbixserver
             Zabbixserver(parser['logfile']).follow_tail()
 
+
 def main():
     """Main entry point of console script"""
     args = get_command_line_args()
     config = process_arguments(args)
-    print('Start sending %s logs to Sentry')
+    sentry_sdk.init(config['sentry_dsn'])
+    print('Starts sending logs to Sentry')
     launch_log_parsers(config)
 
 

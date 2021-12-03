@@ -3,7 +3,6 @@ Default settings for Sentry Logs, and handling of their values.
 """
 import os
 
-import sentry_sdk
 
 SENTRY_LOG_LEVELS = (
     "debug",
@@ -25,5 +24,3 @@ if SENTRY_LOG_LEVEL not in SENTRY_LOG_LEVELS:
     )
     raise SystemExit(MESSAGE)
 
-SENTRY_DSN = os.environ.get('SENTRY_DSN', None)
-sentry_sdk.init(SENTRY_DSN)

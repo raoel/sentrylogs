@@ -25,6 +25,7 @@ class Parser(object):  # pylint: disable=useless-object-inheritance
         self.data = {
             "logger": self.logger,
         }
+        print("added parser %s for logfile '%s'" % (self.logger, self.filepath))
 
     def clear_attributes(self):
         """Reset attributes"""
@@ -49,7 +50,7 @@ class Parser(object):  # pylint: disable=useless-object-inheritance
         for line in follower:
             self.clear_attributes()
 
-            if line is not None:
+            if line.strip() is not None:
                 self.parse(line)
                 send_message(
                     self.message,
