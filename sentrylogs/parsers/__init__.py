@@ -51,16 +51,16 @@ class Parser(object):  # pylint: disable=useless-object-inheritance
             self.clear_attributes()
 
             if not line is None and bool(line.strip()):
-                self.parse(line)
-                send_message(
-                    self.message,
-                    self.level,
-                    self.data,
-                )
+                if self.parse(line):
+                    send_message(
+                        self.message,
+                        self.level,
+                        self.data,
+                    )
             else:
                 time.sleep(1)
 
-    def parse(self, line):
+    def parse(self, line) -> bool:
         """
         Parse a line of a log file.  Must be overridden by the subclass.
         The implementation must set these properties:

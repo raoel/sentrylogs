@@ -39,7 +39,7 @@ class Nginx(Parser):
         """ Get the Sentry log level given the nginx log level"""
         return self.nginx_to_sentry[level]
 
-    def parse(self, line):
+    def parse(self, line) -> bool:
         """Parse a line of the Nginx error log"""
         print(line, file=sys.stderr)
         sys.stderr.flush()
@@ -50,7 +50,7 @@ class Nginx(Parser):
         if not regex:
             self.level = "fatal"
             self.message = line
-            return
+            return True
         self.data["date"] = regex.group("date")
         self.data["time"] = regex.group("time")
         self.level = self.get_sentry_log_level(regex.group("level"))
@@ -71,3 +71,4 @@ class Nginx(Parser):
                 value = "-"
 
             self.data[key] = value
+        return True

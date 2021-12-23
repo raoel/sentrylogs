@@ -14,12 +14,10 @@ class Zabbixserver(Parser):
         r"^\s*\d+\:(\d{4})(\d{2})(\d{2})\:(\d{2})(\d{2})(\d{2}).(\d{3})\s*([^$]*)", re.M
     )
 
-    def parse(self, line):
+    def parse(self, line) -> bool:
         line_matches = self.pattern.match(line)
         if not line_matches:
-            self.message = line
-            self.level = 'fatal'
-            return
+            return False
 
         year, month, day, hour, minutes, seconds, microseconds, logline = line_matches.groups()
         line_timestamp = datetime(int(year),
@@ -32,4 +30,4 @@ class Zabbixserver(Parser):
         self.message = logline
         self.level = 'error'
         self.data['datetime'] = line_timestamp.isoformat()
-
+        return True
